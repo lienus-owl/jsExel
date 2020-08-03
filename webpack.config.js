@@ -24,15 +24,42 @@ module.exports = {
         new HTMLWebpackplugin({
             template: 'index.html'
         }),
-        new CopyPlugin([
-            {
-                from: path.resolve(__dirname, 'src/favicon.svg'),
-                to: path.resolve(__dirname, 'dist')
-            },
-        ]),
+        new CopyPlugin({
+            patterns: [
+                {
+                    from: path.resolve(__dirname, 'src/favicon.ico'),
+                    to: path.resolve(__dirname, 'dist')
+                }
+            ],
+        }),
         new MiniCssExtractPlugin({
             filename: 'style.[hash].css'
         }),
 
-    ]
+    ],
+
+    module: {
+        rules: [
+            {
+                test: /\.s[ac]ss$/i,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'sass-loader',
+                ],
+            },
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
+                }
+            },
+
+        ],
+    }
+
 }
