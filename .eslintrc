@@ -12,7 +12,13 @@
     "indent": "off",
     "comma-dangle": "off",
     "require-jsdoc": "off",
-    "eol-last": "off"
+    "eol-last": "off",
+    "brace-style": "off",
+    "quotes": "off",
+    "no-trailing-spaces": "off",
+    "max-len": "off",
+    "padded-blocks": "off",
+    "operator-linebreak": "off"
   },
   "extends": ["eslint:recommended", "google"]
 }
