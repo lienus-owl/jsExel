@@ -1,12 +1,14 @@
-import {DOMListener} from "@core/DOMListener"
+import {DomListener} from '@core/DomListener'
 
-export class ExcelComponent extends DOMListener
+export class ExcelComponent extends DomListener
 {
     constructor($root, options = {})
     {
-        super($root, options.listeners);
+        super($root, options.listeners)
+        this.name = options.name || ''
     }
-    // возвращает шаблон компонента
+
+    // Возвращает шаблон компонента
     toHTML()
     {
         return ''

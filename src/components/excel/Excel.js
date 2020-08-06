@@ -1,6 +1,5 @@
 import {$} from "@core/dom";
 
-
 export class Excel
 {
 
@@ -15,7 +14,8 @@ export class Excel
     {
         const $root = $.create('div', 'excel')
 
-        this.components.map( Component => {
+        this.components = this.components.map( Component =>
+        {
             const $el = $.create('div', Component.className)
             const component = new Component($el)
 
@@ -40,7 +40,7 @@ export class Excel
 
         this.$el.append(this.getRoot())
 
-        this.components.forEach(component => component.init)
+        this.components.forEach(component => component.init())
     }
 
 }
