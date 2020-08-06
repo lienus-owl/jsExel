@@ -4,6 +4,14 @@ export class Formula extends ExcelComponent
 {
     static className = 'excel__formula'
 
+    constructor($root)
+    {
+        super($root, {
+            name: 'Formula',
+            listeners: ['input']
+        })
+    }
+
     toHTML()
     {
         return `
@@ -17,4 +25,10 @@ export class Formula extends ExcelComponent
                 </div>
                 `
     }
+
+    onInput()
+    {
+        console.log('Formula: onInput', event)
+    }
+
 }
