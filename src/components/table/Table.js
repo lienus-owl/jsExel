@@ -14,7 +14,7 @@ export class Table extends ExcelComponent
 
     toHTML()
     {
-        return createTable(3)
+        return createTable(30)
     }
 
     onMousedown(event)
@@ -25,15 +25,21 @@ export class Table extends ExcelComponent
             const $parent = $resizer.closest('[data-type="resizable"]')
             const cords = $parent.getCords()
 
-            console.log($parent.getCords())
+            // получим текущий id ячейки
+            // console.log($parent.data.col)
 
             document.onmousemove = e =>
             {
                 const delta = e.pageX - cords.right
                 const value = Math.floor(cords.width + delta)
                 $parent.$el.style.width = value + 'px'
+
+                document.querySelectorAll(`[data-col="${$parent.data.col}"]`)
+                    .forEach( el => el.style.width = value + 'px' )
             }
 
+            // чтобы перестало отслеживать положение курсора
+            // после перетаскивания ячейки
             document.onmouseup = () =>
             {
                 document.onmousemove = null

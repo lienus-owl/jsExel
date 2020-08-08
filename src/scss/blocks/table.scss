@@ -78,8 +78,8 @@
   }
   .col-resize{
     top: 0;
-    right: -1px;
-    width: 2px;
+    right: 0;
+    width: 3px;
 
     &:hover{
       cursor: col-resize;
@@ -89,7 +89,7 @@
   .row-resize{
     right: 0;
     left: 0;
-    height: 2px;
+    height: 3px;
 
     &:hover{
       cursor: row-resize;
