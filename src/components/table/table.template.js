@@ -38,7 +38,7 @@ export function createTable(rowsCount = 10)
         .fill('')
         .map(toChar)
         .map(toColumn)
-        .join()
+        .join('')
 
     rows.push(createRow(null, cols))
 
