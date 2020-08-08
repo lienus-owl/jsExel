@@ -51,6 +51,16 @@ class Dom {
 
     return this
   }
+
+  closest(selector)
+  {
+    return $(this.$el.closest(selector))
+  }
+
+  getCords()
+  {
+    return this.$el.getBoundingClientRect()
+  }
 }
 
 // event.target
