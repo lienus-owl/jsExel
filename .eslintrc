@@ -18,7 +18,8 @@
     "no-trailing-spaces": "off",
     "max-len": "off",
     "padded-blocks": "off",
-    "operator-linebreak": "off"
+    "operator-linebreak": "off",
+    "no-undef": "off"
   },
   "extends": ["eslint:recommended", "google"]
 }
