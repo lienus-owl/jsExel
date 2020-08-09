@@ -26,6 +26,7 @@
     background: #f8f9fa;
     border-top: none;
     color: #666;
+    position: relative;
   }
 
   .row-data{
@@ -37,7 +38,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
+    position: relative;
     background: #f8f9fa;
     min-width: 40px;
     width: $cell-width;
@@ -60,9 +61,41 @@
 
     &.selected{
       border: none;
-      outline: 1px solid #527df7;
+      outline: 1px solid $primary-color;
       z-index: 2;
     }
+  }
+
+  .col-resize, .row-resize{
+    position: absolute;
+    background: $primary-color;
+    opacity: 0;
+    bottom: 0;
+    z-index: 2;
+
+    &:hover{
+      opacity: .7 !important;
+    }
+  }
+  .col-resize{
+    top: 0;
+    right: 0;
+    width: 3px;
+
+    &:hover{
+      cursor: col-resize;
+    }
+  }
+
+  .row-resize{
+    right: 0;
+    left: 0;
+    height: 3px;
+
+    &:hover{
+      cursor: row-resize;
+    }
+
   }
 
 }
