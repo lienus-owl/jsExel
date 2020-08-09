@@ -25,27 +25,41 @@ export class Table extends ExcelComponent
             const $parent = $resizer.closest('[data-type="resizable"]')
             const cords = $parent.getCords()
             const type = $resizer.data.resize
-
-            console.log(type)
+            const sideProp = type === 'col' ? 'bottom' : 'right'
+            let value
 
             // получим текущий id ячейки
             // console.log($parent.data.col)
+
+            $resizer.css(
+                {
+                    opacity: 1,
+                    [sideProp]: '-2000px'
+                }
+            )
 
             document.onmousemove = e =>
             {
                 if (type === 'col')
                 {
                     const delta = e.pageX - cords.right
-                    const value = Math.floor(cords.width + delta)
-                    const cells = this.$root.findAll(`[data-col="${$parent.data.col}"]` )
-                    $parent.$el.style.width = value + 'px'
-                    cells.forEach( el => el.style.width = value + 'px' )
+                    value = Math.floor(cords.width + delta)
+                    $resizer.css(
+                        {
+                            right: -delta + 'px'
+                        }
+                    )
                 }
                 else
                 {
                     const delta = e.pageY - cords.bottom
-                    const value = Math.floor(cords.height + delta)
-                    $parent.$el.style.height = value + 'px'
+                    value = Math.floor(cords.height + delta)
+                    $resizer.css(
+                        {
+                            bottom: -delta + 'px'
+                        }
+                    )
+
                 }
             }
 
@@ -54,7 +68,32 @@ export class Table extends ExcelComponent
             document.onmouseup = () =>
             {
                 document.onmousemove = null
+                document.onmouseup = null
+
+                if (type === 'col')
+                {
+                    $parent.css({
+                        width: value + 'px'
+                    })
+                    this.$root.findAll(`[data-col="${$parent.data.col}"]` )
+                        .forEach( el => el.style.width = value + 'px' )
+                }
+                else
+                {
+                    $parent.css({
+                        height: value + 'px'
+                    })
+                }
+
+                $resizer.css(
+                    {
+                        opacity: 0,
+                        bottom: 0,
+                        right: 0
+                    }
+                )
             }
+
         }
     }
 }
