@@ -73,7 +73,7 @@ class Dom {
 
   findAll(selector)
   {
-    return $(this.$el.querySelectorAll(selector))
+    return this.$el.querySelectorAll(selector)
   }
 
   addClass(className)

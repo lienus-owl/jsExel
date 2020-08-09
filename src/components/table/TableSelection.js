@@ -15,7 +15,6 @@ export class TableSelection
         $el.addClass(TableSelection.className)
         this.group.push($el)
         this.current = $el
-
     }
 
     clear()
