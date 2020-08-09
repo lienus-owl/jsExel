@@ -103,6 +103,18 @@ class Dom {
     })
   }
 
+  id(parse)
+  {
+    if (parse)
+    {
+      const parced = this.id().split(':')
+      return {
+        row: +parced[0],
+        col: +parced[1]
+      }
+    }
+    return this.data.id
+  }
 }
 
 // event.target
