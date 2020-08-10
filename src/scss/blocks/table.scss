@@ -60,6 +60,7 @@
     white-space: nowrap;
     outline: none;
     overflow-y: hidden;
+    cursor: default;
 
     &.selected{
       border: none;
