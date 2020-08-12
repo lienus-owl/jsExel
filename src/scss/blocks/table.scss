@@ -27,11 +27,12 @@
     border-top: none;
     color: #666;
     position: relative;
+    user-select: none
   }
 
   .row-data{
     display: flex;
-
+    user-select: none
   }
 
   .column{
@@ -58,6 +59,8 @@
     border-left: 0;
     white-space: nowrap;
     outline: none;
+    overflow-y: hidden;
+    cursor: default;
 
     &.selected{
       border: none;
