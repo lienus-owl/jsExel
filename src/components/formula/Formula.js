@@ -1,4 +1,5 @@
 import {ExcelComponent} from "@core/ExcelComponent";
+import {$} from "@core/dom"
 
 export class Formula extends ExcelComponent
 {
@@ -51,7 +52,9 @@ export class Formula extends ExcelComponent
 
     onKeydown(event)
     {
-        if (event.key === 'Enter')
+        const keys = ['Enter', 'Tab']
+
+        if (keys.includes(event.key))
         {
             event.preventDefault()
 

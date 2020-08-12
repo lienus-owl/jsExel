@@ -99,7 +99,7 @@ export class Table extends ExcelComponent
 
     onInput(event)
     {
-        this.$emit('table:input', $(event.ta))
+        this.$emit('table:input', $(event.target))
     }
 }
 
