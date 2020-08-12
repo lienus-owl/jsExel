@@ -35,9 +35,7 @@ export class Table extends ExcelComponent
         this.selection = new TableSelection()
 
         const $cell = this.$root.find('[data-id="0:0"]')
-        this.selection.select($cell)
-
-        this.$emit('table:select', $cell)
+        this.selectCell($cell)
 
         this.$on('formula:input', text =>
         {
@@ -49,6 +47,12 @@ export class Table extends ExcelComponent
             this.selection.current.focus()
         })
 
+    }
+
+    selectCell($cell)
+    {
+        this.selection.select($cell)
+        this.$emit('table:select', $cell)
     }
 
     onMousedown(event)
@@ -93,8 +97,7 @@ export class Table extends ExcelComponent
             const id = this.selection.current.id(true)
 
             const $next = this.$root.find(nextSelector(key, id))
-            this.selection.select($next)
-            this.$emit('table:select', $next)
+            this.selectCell($next)
         }
 
     }

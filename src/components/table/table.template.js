@@ -22,7 +22,7 @@ function toCell(row)
              data-col="${col}"
              data-type="cell"
              data-id="${row}:${col}"
-         >111</div>
+         ></div>
         `
     }
 }
