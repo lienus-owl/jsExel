@@ -1,57 +1,51 @@
-import {DomListener} from '@core/DomListener'
+import {DomListener} from '@core/DomListener';
 
-export class ExcelComponent extends DomListener
-{
-    constructor($root, options = {})
-    {
-        super($root, options.listeners)
-        this.name = options.name || ''
-        this.emitter = options.emitter
-        this.unsubscribers = []
+export class ExcelComponent extends DomListener {
+  constructor($root, options = {}) {
+    super($root, options.listeners)
+    this.name = options.name || ''
+    this.emitter = options.emitter || {}
+    this.store = options.store
+    this.subscribe = options.subscribe || []
 
-        this.prepeare()
-    }
+    this.unsubscribers = []
+    // this.storeUnsub = null
 
-    // возвращает шаблон компонента
-    toHTML()
-    {
-        return ''
-    }
+    this.prepare()
+  }
 
-    // настраиваем компонент до init
-    prepeare()
-    {
+  prepare() {}
 
-    }
+  $emit(event, ...args) {
+    this.emitter.emit(event, ...args)
+  }
 
-    // инициализируем компонент
-    // добавляем слушателей DOM
-    init()
-    {
-        this.initDOMListeners()
-    }
+  $on(event, fn) {
+    const unsub = this.emitter.subscribe(event, fn)
+    this.unsubscribers.push(unsub)
+  }
 
-    // удаляем компонент
-    // чистим слушателей
-    destroy()
-    {
-        this.removeDOMListeners()
-        this.unsubscribers.forEach(unsub => unsub())
-    }
+  storeChanged() {}
 
-    // фасад
-    // уведомляем слушателей про событие event
-    $emit(event, ...args)
-    {
-        this.emitter.emit(event, ...args)
-    }
+  $dispatch(action) {
+    this.store.dispatch(action)
+  }
 
-    // фасад
-    // подписываемся на событие event
-    $on(event, fn)
-    {
-        const unsub = this.emitter.subscribe(event, fn)
-        this.unsubscribers.push(unsub)
-    }
+  // $subscribe(fn) {
+  //   this.storeUnsub = this.store.subscribe(fn)
+  // }
 
+  init() {
+    this.initDOMListeners()
+  }
+
+  destroy() {
+    this.removeDOMListeners()
+    this.unsubscribers.forEach(unsub => unsub())
+    // this.storeUnsub.unsubscribe()
+  }
+
+  toHTML() {
+    return ''
+  }
 }

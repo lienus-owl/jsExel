@@ -1,156 +1,145 @@
-class Dom {
-  constructor(selector)
-  {
-    this.$$listeners = {}
-    this.$el = typeof selector === 'string'
-        ? document.querySelector(selector)
-        : selector
-  }
-
-  html(html)
-  {
-    if (typeof html === 'string')
-    {
-      this.$el.innerHTML = html
-      return this
+class DOM {
+    constructor(selector) {
+        this.$el = typeof selector === 'string' ?
+            document.querySelector(selector) : selector
     }
-    return this.$el.outerHTML.trim()
-  }
-
-  text(text)
-  {
-    if (typeof text === 'string')
-    {
-      this.$el.textContent = text
-      return this
+    html(html) {
+        if (html) {
+            this.$el.innerHTML = html
+            return this
+        }
+        return this.$el.innerHTML.trim()
     }
-    if (this.$el.tagName.toLowerCase() === 'input')
-    {
-      return this.$el.value.trim()
+    text(text) {
+        if (typeof text !== 'undefined') {
+            this.$el.textContent = text
+        }
+        if (this.$el.tagName.toLowerCase() === 'input') {
+            return this.$el.value.trim()
+        }
+        return this.$el.textContent.trim()
     }
-    return this.$el.textContent.trim()
-  }
-
-  clear()
-  {
-    this.html('')
-    return this
-  }
-
-  on(eventType, callback)
-  {
-    // this.$$listeners[eventType] = callback
-    this.$el.addEventListener(eventType, callback)
-  }
-
-  off(eventType, callback)
-  {
-    this.$el.removeEventListener(eventType, callback)
-  }
-
-  append(node)
-  {
-    if (node instanceof Dom)
-    {
-      node = node.$el
+    append(node) {
+        if (node.$el instanceof DOM) {
+            node = node.$el
+        }
+        if (Element.prototype.append) {
+            this.$el.append(node.$el)
+        } else {
+            this.$el.appendChild(node)
+        }
     }
 
-    if (Element.prototype.append)
-    {
-      this.$el.append(node)
-    } else
-    {
-      this.$el.appendChild(node)
+    attr(name, value) {
+        if (value) {
+            this.$el.setAttribute(name, value)
+            return this
+        }
+        return this.$el.getAttribute(name)
     }
 
-    return this
-  }
-
-  get data()
-  {
-    return this.$el.dataset
-  }
-
-  closest(selector)
-  {
-    return $(this.$el.closest(selector))
-  }
-
-  getCords()
-  {
-    return this.$el.getBoundingClientRect()
-  }
-
-  find(selector) {
-    return $(this.$el.querySelector(selector))
-  }
-
-  findAll(selector)
-  {
-    return this.$el.querySelectorAll(selector)
-  }
-
-  addClass(className)
-  {
-    this.$el.classList.add(className)
-    return this
-  }
-
-  removeClass(className)
-  {
-    this.$el.classList.remove(className)
-    return this
-  }
-
-  css(styles = {})
-  {
-    // for (const key in styles)
-    // {
-    //   // eslint-disable-next-line
-    //   if (styles.hasOwnProperty(key))
-    //   {
-    //     console.log(key)
-    //     console.log(styles[key])
-    //   }
-    // }
-    Object.keys(styles).forEach(key =>
-    {
-      this.$el.style[key] = styles[key]
-    })
-  }
-
-  id(parse)
-  {
-    if (parse)
-    {
-      const parced = this.id().split(':')
-      return {
-        row: +parced[0],
-        col: +parced[1]
-      }
+    get data() {
+        return this.$el.dataset
     }
-    return this.data.id
-  }
 
-  focus()
-  {
-    this.$el.focus()
-    return this
-  }
+    focus() {
+        this.$el.focus()
+        this.$el.selectionStart = this.$el.textContent.length
+        return this
+    }
+
+    id(parsed) {
+        if (parsed) {
+            const [row, cell] = this.data.id.split(':')
+            return {
+                row: +row,
+                cell: +cell
+            }
+        }
+        return this.data.id
+    }
+
+    getStyles(styles = []) {
+        return styles.reduce((acc, s) => {
+            acc[s] = this.$el.style[s]
+            return acc
+        }, {})
+    }
+
+    find(selector) {
+        return $(this.$el.querySelector(selector))
+    }
+
+    findAll(selector) {
+        return $(this.$el.querySelectorAll(selector))
+    }
+
+    each(fn) {
+        this.$el.forEach(fn)
+    }
+
+    addClass(className) {
+        this.$el.classList.add(className)
+        return this
+    }
+
+    placeCaretAtEnd() {
+        placeCaretAtEnd(this.$el)
+        return this
+    }
+
+    removeClass(className) {
+        this.$el.classList.remove(className)
+        return this
+    }
+
+    on(eventName, callback) {
+        this.$el.addEventListener(eventName, callback)
+    }
+
+    off(eventName, callback) {
+        this.$el.removeEventListener(eventName, callback)
+    }
+
+    css(styles = {}) {
+        Object.keys(styles).forEach( style => {
+            this.$el.style[style] = styles[style]
+        })
+        return this
+    }
+
+    clear() {
+        this.$el.innerHTML = ''
+    }
 }
 
-// event.target
-export function $(selector)
-{
-  return new Dom(selector)
+export function $(selector) {
+    return new DOM(selector)
 }
 
-$.create = (tagName, classes = '') =>
-{
-  const el = document.createElement(tagName)
-  if (classes)
-  {
-    el.classList.add(classes)
-  }
-  return $(el)
+$.create = (tagName, classes = '') => {
+    const el = document.createElement(tagName)
+    if (classes) {
+        el.classList.add(classes)
+    }
+    return $(el)
+}
+
+
+function placeCaretAtEnd(el) {
+    el.focus()
+    if (typeof window.getSelection != "undefined"
+        && typeof document.createRange != "undefined") {
+        const range = document.createRange()
+        range.selectNodeContents(el)
+        range.collapse(false)
+        const sel = window.getSelection()
+        sel.removeAllRanges()
+        sel.addRange(range)
+    } else if (typeof document.body.createTextRange != "undefined") {
+        const textRange = document.body.createTextRange()
+        textRange.moveToElementText(el)
+        textRange.collapse(false)
+        textRange.select()
+    }
 }

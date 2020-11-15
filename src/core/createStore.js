@@ -1,28 +1,22 @@
-export function createStore(rootReducer, initialState = {})
-{
+export function createStore(rootReducer, initialState = {}) {
     let state = rootReducer({...initialState}, {type: '__INIT__'})
     let listeners = []
 
     return {
-        subscribe(fn)
-        {
+        subscribe(fn) {
             listeners.push(fn)
             return {
-                unsubscribe()
-                {
-                    listeners = listeners.filter(l => l !== fn)
+                unsubscribe() {
+                    listeners = listeners.filter(listener => listener !== fn)
                 }
             }
-
         },
-        dispatch(action)
-        {
+        dispatch(action) {
             state = rootReducer(state, action)
             listeners.forEach(listener => listener(state))
         },
-        getState()
-        {
-            return state
+        getState() {
+            return JSON.parse(JSON.stringify(state))
         }
     }
 }
